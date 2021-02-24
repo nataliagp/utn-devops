@@ -1,0 +1,47 @@
+version: '3.3'
+services:
+  
+  mysqlDB:
+    image: mysql:5.7
+    container_name: mysql-cont
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'devops_login'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'nataliagp'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'LK123'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'LK123'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+      # Se renombra a 1.sql y 2.sql porque se ejecutan en orden según el nombre
+    volumes:
+      - "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./scripts/data.sql:/docker-entrypoint-initdb.d/2.sql"
+      - my-db:/var/lib/mysql57
+    networks:
+      - common-network
+
+  tomcat:
+    container_name: tomcat-cont
+    image: ubu-tomcat8
+    restart: always
+    ports:
+      - 8081:8080
+    expose:
+      - '8080'
+    networks:
+      - common-network
+
+networks:
+  common-network:
+      driver: bridge
+# Names our volume
+volumes:
+  my-db:

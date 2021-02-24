@@ -1,0 +1,1 @@
+INSERT INTO `user` VALUES (1,'danip','123','Daniela Perez'),(2,'juanl','456','Juan Lopez'),(3,'carog','789','Carolina García');
